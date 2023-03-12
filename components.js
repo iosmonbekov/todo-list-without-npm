@@ -1,4 +1,4 @@
-function InputForm({ type = "text", initValue = "", onSubmit, shouldFocus = false }) {
+function InputForm({ type = "text", initValue = "", onSubmit, shouldFocus = false, placeholder = "" }) {
   const [value, setValue] = React.useState(initValue);
   const ref = React.useRef();
 
@@ -14,7 +14,14 @@ function InputForm({ type = "text", initValue = "", onSubmit, shouldFocus = fals
 
   return (
     <form className="form-group" onSubmit={onBeforeSubmit}>
-      <input ref={ref} className="form-control" type={type} value={value} onChange={(e) => setValue(e.target.value)} />
+      <input
+        ref={ref}
+        placeholder={placeholder}
+        className="form-control"
+        type={type}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
     </form>
   );
 }
