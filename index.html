@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap:  -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />
+    <!-- React:  -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- Babel: // Needs to understand JSX, (must add to src type="text/babel") -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>Todo-list</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <!-- Libs:  -->
+  <script src="libs/redux.js"></script>
+  <script src="libs/react-redux.js" type="text/babel"></script>
+
+  <!-- Store -->
+  <script src="store.js"></script>
+
+  <!-- Components:  -->
+  <script src="components.js" type="text/babel"></script>
+
+  <script type="text/babel">
+    function App() {
+      const todos = ReactRedux.useSelector((state) => state);
+      const dispatch = ReactRedux.useDispatch();
+
+      const createTodo = (text) => {
+        dispatch({ type: "ADD_TODO", payload: { id: Date.now(), text } });
+      };
+
+      const removeTodo = (id) => {
+        dispatch({ type: "REMOVE_TODO", payload: id });
+      };
+
+      const editTodo = (todo) => {
+        dispatch({ type: "EDIT_TODO", payload: todo });
+      };
+
+      return (
+        <div class="container p-2">
+          <h1>Todo-list</h1>
+          <InputForm onSubmit={createTodo} />
+          <div class="mt-3">
+            {todos.length ? (
+              <TodoList todos={todos} onRemove={removeTodo} onEdit={editTodo} />
+            ) : (
+              <span>No todos yet...</span>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    root.render(
+      <ReactRedux.Provider store={store}>
+        <App />
+      </ReactRedux.Provider>
+    );
+  </script>
+</html>
