@@ -48,27 +48,3 @@ const Redux = (() => {
 
   return { createStore, applyMiddleware, combineReducers };
 })();
-
-// Middlewares:
-const Middleware = (() => {
-  function logger(store) {
-    return (next) => {
-      return (action) => {
-        console.log("Action: ", action.type);
-        next(action);
-        console.log("State: ", store.getState());
-      };
-    };
-  }
-
-  function saverLS(store) {
-    return (next) => {
-      return (action) => {
-        next(action);
-        localStorage.setItem("STORE", JSON.stringify(store.getState()));
-      };
-    };
-  }
-
-  return { logger, saverLS };
-})();

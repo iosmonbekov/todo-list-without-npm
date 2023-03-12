@@ -59,7 +59,7 @@ function TodoItem({ todo, onRemove, onEdit }) {
     <li className="list-group-item d-flex justify-content-between align-items-center" key={todo.id}>
       {content(todo)}
       <div>
-        <button onClick={() => setStatus("EDITING")} className="btn btn-primary mx-2">
+        <button disabled={status === "EDITING"} onClick={() => setStatus("EDITING")} className="btn btn-primary mx-2">
           <i class="bi bi-pen-fill"></i>
         </button>
         <button onClick={() => onRemove(todo.id)} className="btn btn-danger">
@@ -67,5 +67,28 @@ function TodoItem({ todo, onRemove, onEdit }) {
         </button>
       </div>
     </li>
+  );
+}
+
+function ErrorComponent({ error }) {
+  const dispatch = ReactRedux.useDispatch();
+  const [loader, setLoader] = React.useState(false);
+
+  const reset = () => {
+    setLoader(true);
+
+    setTimeout(() => {
+      localStorage.clear()
+      dispatch({ type: "CLEAN_ERROR" });
+    }, 500);
+  };
+
+  return (
+    <div className="container">
+      <h2 className="mt-5">Error: {error}</h2>
+      <button disabled={loader} className="btn btn-warning" onClick={reset}>
+        {loader ? "Loading..." : "Try again?"}
+      </button>
+    </div>
   );
 }

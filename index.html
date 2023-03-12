@@ -21,6 +21,9 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
+    <!-- Redux-Saga:  -->
+    <script crossorigin src="https://unpkg.com/redux-saga/dist/redux-saga.umd.min.js"></script>
+
     <!-- Babel: // Needs to understand JSX, (must add to src type="text/babel") -->
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <title>Todo-list</title>
@@ -32,6 +35,8 @@
   <script src="libs/redux.js"></script>
   <script src="libs/react-redux.js" type="text/babel"></script>
 
+  <!-- Sagas: -->
+  <script src="saga.js"></script>
   <!-- Store -->
   <script src="store.js"></script>
 
@@ -40,8 +45,13 @@
 
   <script type="text/babel">
     function App() {
-      const todos = ReactRedux.useSelector((state) => state);
+      const todos = ReactRedux.useSelector((state) => state.todos);
+      const error = ReactRedux.useSelector((state) => state.error);
       const dispatch = ReactRedux.useDispatch();
+
+      React.useEffect(() => {
+        dispatch({ type: "TODOS_FETCH_REQUEST", payload: "here" });
+      }, [error]);
 
       const createTodo = (text) => {
         dispatch({ type: "ADD_TODO", payload: { id: Date.now(), text } });
@@ -55,15 +65,19 @@
         dispatch({ type: "EDIT_TODO", payload: todo });
       };
 
+      if (error) {
+        return <ErrorComponent error={error} />;
+      }
+
       return (
         <div class="container p-2">
           <h1>Todo-list</h1>
-          <InputForm placeholder='Enter todo...' onSubmit={createTodo} />
+          <InputForm placeholder="Enter todo..." onSubmit={createTodo} />
           <div class="mt-3">
             {todos.length ? (
               <TodoList todos={todos} onRemove={removeTodo} onEdit={editTodo} />
             ) : (
-              <span>No todos yet...</span>
+                <p class="text-center">No todos yet :/</p>
             )}
           </div>
         </div>
