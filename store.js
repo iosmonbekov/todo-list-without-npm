@@ -1,4 +1,4 @@
-const DEFAULT_TODO_REDUCER_STATE = JSON.parse(localStorage.getItem('STORE') ?? []);
+const DEFAULT_TODO_REDUCER_STATE = JSON.parse(localStorage.getItem('STORE') ?? '[]');
 
 function todoReducer(state = DEFAULT_TODO_REDUCER_STATE, action) {
   switch (action.type) {
