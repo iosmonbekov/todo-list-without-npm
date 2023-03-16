@@ -35,7 +35,7 @@ const sagaMiddleware = ReduxSaga.default();
 
 const store = Redux.createStore(
   rootReducer,
-  Redux.applyMiddleware(sagaMiddleware, saveToLS(["ADD_TODO", "REMOVE_TODO", "EDIT_TODO"]), logger)
+  Redux.applyMiddleware(sagaMiddleware, logger)
 );
 
 sagaMiddleware.run(rootSaga);
@@ -47,19 +47,6 @@ function logger(store) {
       console.log("Action: ", action.type);
       next(action);
       console.log("State: ", store.getState());
-    };
-  };
-}
-
-function saveToLS(actions) {
-  return (store) => {
-    return (next) => {
-      return (action) => {
-        next(action);
-        if (actions.includes(action.type)) {
-          localStorage.setItem("STORE", JSON.stringify(store.getState()));
-        }
-      };
     };
   };
 }
