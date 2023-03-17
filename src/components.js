@@ -1,8 +1,11 @@
-function InputForm({ type = "text", initValue = "", onSubmit, shouldFocus = false, placeholder = "" }) {
-  const [value, setValue] = React.useState(initValue);
-  const ref = React.useRef();
+import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "./libs/react-redux";
 
-  React.useEffect(() => {
+export function InputForm({ type = "text", initValue = "", onSubmit, shouldFocus = false, placeholder = "" }) {
+  const [value, setValue] = useState(initValue);
+  const ref = useRef();
+
+  useEffect(() => {
     if (shouldFocus) ref.current.focus();
   }, []);
 
@@ -26,18 +29,18 @@ function InputForm({ type = "text", initValue = "", onSubmit, shouldFocus = fals
   );
 }
 
-function TodoList({ todos = [], onRemove, onEdit }) {
+export function TodoList({ todos = [], onRemove, onEdit }) {
   return (
     <ul className="list-group">
       {todos.map((todo) => (
-        <TodoItem todo={todo} onEdit={onEdit} onRemove={onRemove} />
+        <TodoItem key={todo.id} todo={todo} onEdit={onEdit} onRemove={onRemove} />
       ))}
     </ul>
   );
 }
 
-function TodoItem({ todo, onRemove, onEdit }) {
-  const [status, setStatus] = React.useState("READING");
+export function TodoItem({ todo, onRemove, onEdit }) {
+  const [status, setStatus] = useState("READING");
 
   const onBeforeEdit = (todo) => {
     onEdit(todo);
@@ -60,19 +63,19 @@ function TodoItem({ todo, onRemove, onEdit }) {
       {content(todo)}
       <div>
         <button disabled={status === "EDITING"} onClick={() => setStatus("EDITING")} className="btn btn-primary mx-2">
-          <i class="bi bi-pen-fill"></i>
+          <i className="bi bi-pen-fill"></i>
         </button>
         <button onClick={() => onRemove(todo.id)} className="btn btn-danger">
-          <i class="bi bi-trash-fill"></i>
+          <i className="bi bi-trash-fill"></i>
         </button>
       </div>
     </li>
   );
 }
 
-function ErrorComponent({ error }) {
-  const dispatch = ReactRedux.useDispatch();
-  const [loader, setLoader] = React.useState(false);
+export function ErrorComponent({ error }) {
+  const dispatch = useDispatch();
+  const [loader, setLoader] = useState(false);
 
   const reset = () => {
     setLoader(true);

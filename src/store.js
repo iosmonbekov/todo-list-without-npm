@@ -1,3 +1,8 @@
+import createSagaMiddleware from "@redux-saga/core";
+
+import { createStore, applyMiddleware, combineReducers } from "./libs/redux";
+import { rootSaga } from "./saga";
+
 function todoReducer(state = [], action) {
   switch (action.type) {
     case "TODOS_FETCH_SUCCESS":
@@ -26,17 +31,14 @@ function errorReducer(state, action) {
   }
 }
 
-const rootReducer = Redux.combineReducers({
+const rootReducer = combineReducers({
   todos: todoReducer,
   error: errorReducer,
 });
 
-const sagaMiddleware = ReduxSaga.default();
+const sagaMiddleware = createSagaMiddleware();
 
-const store = Redux.createStore(
-  rootReducer,
-  Redux.applyMiddleware(sagaMiddleware, logger)
-);
+export const store = createStore(rootReducer, applyMiddleware(sagaMiddleware, logger));
 
 sagaMiddleware.run(rootSaga);
 
